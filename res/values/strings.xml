@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, HeartRateMonitorActivity!</string>
+    <string name="app_name">HeartRateMonitor</string>
+    <string name="times_pre_minute">Times/min</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="heart_rate_checking">Heart Rate Checking ...</string>
+    <string name="heart_rate_warning">Please wear Smart Watch, and with a good fit</string>
+    <string name="wear_not_correct_try_again">Check wear way and try again, please.</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_heart_rate_number_size">58.0sp</dimen>
+    <dimen name="text_heart_rate_unit_size">22.0sp</dimen>
+    <dimen name="content_separator_line">1.0dip</dimen>
+    <dimen name="text_heart_rate_state_size">28.0sp</dimen>
+    <dimen name="content_separator_padding">0.0dip</dimen>
+    <dimen name="view_padding_top">45.0dip</dimen>
+    <dimen name="view_padding_left">5.0dip</dimen>
+    <dimen name="item_backgroud_height">40.0dip</dimen>
+    <dimen name="item_backgroud_width">-1.0dip</dimen>
+    <dimen name="history_item_height">25.0dip</dimen>
+    <dimen name="history_item_duration">5.0dip</dimen>
+    <dimen name="history_item_backgroud_height">30.0dip</dimen>
+    <dimen name="history_rate_padding_left">70.0dip</dimen>
+    <dimen name="content_separator_padding_left">60.0dip</dimen>
+    <dimen name="content_separator_padding_top">0.0dip</dimen>
+    <dimen name="rate_unit_padding_left">15.0dip</dimen>
+    <dimen name="rate_number_padding_left">90.0dip</dimen>
+    <dimen name="rate_state_padding_left">50.0dip</dimen>
+</resources>

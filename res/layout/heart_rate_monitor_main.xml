@@ -46,6 +46,7 @@
         <TextView 
             android:textSize="@dimen/text_heart_rate_unit_size" 
             android:textColor="@color/red" 
+            android:text="@string/times_pre_minute"
             android:gravity="top" 
             android:id="@+id/heart_rate_unit" 
             android:layout_width="wrap_content" 

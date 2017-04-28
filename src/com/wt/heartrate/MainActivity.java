@@ -31,7 +31,9 @@ public class MainActivity extends Activity {
 		public void handleMessage(Message message){
 			switch(message.what){
 				case MSG_HIDE_WARNING:
-					mWarningTextView.setVisibility(View.GONE);
+					if(mWarningTextView != null){
+						mWarningTextView.setVisibility(View.GONE);
+					}
 					break;
 				case MSG_SHOW_RESULT:
 					setState(STATE_RESULT);
@@ -49,20 +51,29 @@ public class MainActivity extends Activity {
 	private static final int STATE_IDLE = 0;
 	private static final int STATE_DETECTING = 1;
 	private static final int STATE_RESULT = 2;
+	
+	private static final int STYLE_1 = 1;
+	private static final int STYLE_2 = 2;
+	private static final int mStyle = STYLE_2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.heart_rate_monitor_main);
+		setContentView((mStyle == STYLE_2) ? R.layout.heart_rate_monitor_main_2 : R.layout.heart_rate_monitor_main);
 		
 		mWarningTextView = (TextView)findViewById(R.id.heart_rate_warning);
 		mHandler.sendEmptyMessageDelayed(MSG_HIDE_WARNING, 2000);
 		
 		mStateIconView = (ImageView)findViewById(R.id.image);
 		mStateIconView.setOnClickListener(mOnClickListener);
+		if(mStyle == STYLE_2){
+			mStateIconView.setBackgroundResource(R.drawable.heartrate_checking_anim_2);
+		}
 		mStateTextView = (TextView)findViewById(R.id.heart_rate_state);
-		mStateTextView.setOnClickListener(mOnClickListener);
+		if(mStateTextView != null){
+			mStateTextView.setOnClickListener(mOnClickListener);
+		}
 				
 		mResultView = findViewById(R.id.heart_rate_view);
 		mResultTextView = (TextView)findViewById(R.id.heart_rate_number);
@@ -83,6 +94,8 @@ public class MainActivity extends Activity {
 				mCurrRate = (int)arg0.values[0];
 			}			
 		};
+		
+		startDetecting();
 	}
 	
 	@Override
@@ -126,10 +139,14 @@ public class MainActivity extends Activity {
 			mStateTextView.setText(isDetecting() ? R.string.heart_rate_checking : R.string.heart_rate);
 		}
 		
-		mStateIconView.setBackgroundResource(isDetecting() ? R.drawable.heart_rate_heart_checking_anim : R.drawable.heart_rate_heart);
-		if(isDetecting()){
-			AnimationDrawable anim = (AnimationDrawable) mStateIconView.getBackground(); 
+		if(mStyle == STYLE_1){
+			mStateIconView.setBackgroundResource(isDetecting() ? R.drawable.heart_rate_heart_checking_anim : R.drawable.heart_rate_heart);
+		}
+		AnimationDrawable anim = (AnimationDrawable) mStateIconView.getBackground(); 
+		if(isDetecting()){			
 			anim.start();
+		}else{
+			anim.stop();
 		}
 	}
 	
@@ -147,8 +164,12 @@ public class MainActivity extends Activity {
 			if(isDetecting()){
 				return;
 			}
-			setState(STATE_DETECTING);
-			mHandler.sendEmptyMessageDelayed(MSG_SHOW_RESULT, 2*2000);
+			startDetecting();
 		}
 	};
+	
+	private void startDetecting(){
+		setState(STATE_DETECTING);
+		mHandler.sendEmptyMessageDelayed(MSG_SHOW_RESULT, 2*2000);
+	}
 }

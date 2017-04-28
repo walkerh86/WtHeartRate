@@ -95,6 +95,7 @@ public class MainActivity extends Activity {
 			}			
 		};
 		
+		mCurrRate = 0;
 		startDetecting();
 	}
 	

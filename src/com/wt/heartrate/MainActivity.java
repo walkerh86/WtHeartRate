@@ -90,8 +90,13 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onSensorChanged(SensorEvent arg0) {
-				Log.i("hcj", "onSensorChanged value[0]="+arg0.values[0]);
-				mCurrRate = (int)arg0.values[0];
+				Log.i("hcj.heart", "onSensorChanged value[0]="+arg0.values[0]);
+				int rate = (int)arg0.values[0];
+				if(rate > 20f && rate < 120f){
+					mCurrRate = rate;
+					mHandler.sendEmptyMessage(MSG_SHOW_RESULT);
+				}
+				//mCurrRate
 			}			
 		};
 		
@@ -171,6 +176,6 @@ public class MainActivity extends Activity {
 	
 	private void startDetecting(){
 		setState(STATE_DETECTING);
-		mHandler.sendEmptyMessageDelayed(MSG_SHOW_RESULT, 2*2000);
+		//mHandler.sendEmptyMessageDelayed(MSG_SHOW_RESULT, 2*2000);
 	}
 }

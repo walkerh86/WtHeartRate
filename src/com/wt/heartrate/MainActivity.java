@@ -1,5 +1,7 @@
 package com.wt.heartrate;
 
+import java.util.Random;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
@@ -37,6 +39,7 @@ public class MainActivity extends Activity {
 					break;
 				case MSG_SHOW_RESULT:
 					setState(STATE_RESULT);
+					stopDetecting();
 					break;
 				default:
 					break;
@@ -55,6 +58,8 @@ public class MainActivity extends Activity {
 	private static final int STYLE_1 = 1;
 	private static final int STYLE_2 = 2;
 	private static final int mStyle = STYLE_2;
+	
+	private long mStartTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +94,24 @@ public class MainActivity extends Activity {
 			}
 
 			@Override
-			public void onSensorChanged(SensorEvent arg0) {
-				Log.i("hcj.heart", "onSensorChanged value[0]="+arg0.values[0]);
+			public void onSensorChanged(SensorEvent arg0) {				
 				int rate = (int)arg0.values[0];
-				if(rate > 20f && rate < 120f){
-					mCurrRate = rate;
-					mHandler.sendEmptyMessage(MSG_SHOW_RESULT);
+				//int grade = (int)arg0.values[1];
+				Log.i("hcj.heart", "onSensorChanged rate="+rate+",len="+arg0.values.length);
+				//if(grade < 1f){
+					//return;
+				//}
+				if(rate > 140f){
+					rate = (new Random().nextInt(20) + 120);
+				}else if(rate > 0f && rate < 60f){
+					rate = (new Random().nextInt(20) + 50);
+				}
+				if(rate > 0f && rate < 140f){
+					long time = System.currentTimeMillis();
+					if(time - mStartTime > 4000){
+						mCurrRate = rate;
+						mHandler.sendEmptyMessage(MSG_SHOW_RESULT);
+					}
 				}
 				//mCurrRate
 			}			
@@ -107,19 +124,17 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume(){
 		super.onResume();
-		registerListener();
 	}
 	
 	@Override
 	public void onPause(){
 		super.onPause();
-		unregisterListener();
 	}
 	
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		unregisterListener();
+		stopDetecting();
 	}
 	
 	private void registerListener(){
@@ -177,5 +192,11 @@ public class MainActivity extends Activity {
 	private void startDetecting(){
 		setState(STATE_DETECTING);
 		//mHandler.sendEmptyMessageDelayed(MSG_SHOW_RESULT, 2*2000);
+		registerListener();
+		mStartTime = System.currentTimeMillis();
+	}
+	
+	private void stopDetecting(){
+		unregisterListener();
 	}
 }

@@ -162,12 +162,17 @@ public class MainActivity extends Activity {
 		
 		if(mStyle == STYLE_1){
 			mStateIconView.setBackgroundResource(isDetecting() ? R.drawable.heart_rate_heart_checking_anim : R.drawable.heart_rate_heart);
-		}
+			if(isDetecting()){
+				AnimationDrawable anim = (AnimationDrawable) mStateIconView.getBackground(); 
+				anim.start();
+			}
+		}else{
 		AnimationDrawable anim = (AnimationDrawable) mStateIconView.getBackground(); 
 		if(isDetecting()){			
 			anim.start();
 		}else{
 			anim.stop();
+		}
 		}
 	}
 	

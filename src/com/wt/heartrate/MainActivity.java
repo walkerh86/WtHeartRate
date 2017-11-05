@@ -103,12 +103,14 @@ public class MainActivity extends Activity {
 				//}
 				if(rate > 140f){
 					rate = (new Random().nextInt(20) + 120);
+				}else if(rate < 50f){
+					return;
 				}else if(rate > 0f && rate < 60f){
 					rate = (new Random().nextInt(20) + 50);
 				}
-				if(rate > 0f && rate < 140f){
+				if(rate > 50f && rate < 140f){
 					long time = System.currentTimeMillis();
-					if(time - mStartTime > 4000){
+					if(time - mStartTime > 8000){
 						mCurrRate = rate;
 						mHandler.sendEmptyMessage(MSG_SHOW_RESULT);
 					}

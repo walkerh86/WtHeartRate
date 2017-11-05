@@ -41,6 +41,10 @@ public class MainActivity extends Activity {
 					setState(STATE_RESULT);
 					stopDetecting();
 					break;
+				case MSG_SHOW_TIMEOUT:
+					setState(STATE_TIMEOUT);
+					stopDetecting();					
+					break;
 				default:
 					break;
 			}
@@ -48,12 +52,14 @@ public class MainActivity extends Activity {
 	};
 	private static final int MSG_HIDE_WARNING = 1;
 	private static final int MSG_SHOW_RESULT = 2;
+	private static final int MSG_SHOW_TIMEOUT = 3;
 	
 	private int mCurrRate;
 	private int mState = -1;
 	private static final int STATE_IDLE = 0;
 	private static final int STATE_DETECTING = 1;
 	private static final int STATE_RESULT = 2;
+	private static final int STATE_TIMEOUT = 3;
 	
 	private static final int STYLE_1 = 1;
 	private static final int STYLE_2 = 2;
@@ -112,8 +118,14 @@ public class MainActivity extends Activity {
 					long time = System.currentTimeMillis();
 					if(time - mStartTime > 8000){
 						mCurrRate = rate;
+						mHandler.removeMessages(MSG_SHOW_TIMEOUT);
 						mHandler.sendEmptyMessage(MSG_SHOW_RESULT);
 					}
+				}else{
+					//long time = System.currentTimeMillis();
+					//if(time - mStartTime > 25000){
+						//mHandler.sendEmptyMessage(MSG_SHOW_TIMEOUT);
+					//}
 				}
 				//mCurrRate
 			}			
@@ -126,6 +138,10 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume(){
 		super.onResume();
+		if(mState == STATE_RESULT || mState == STATE_TIMEOUT){
+			mState = STATE_IDLE;
+			updateStateView();
+		}
 	}
 	
 	@Override
@@ -159,7 +175,13 @@ public class MainActivity extends Activity {
 		}else{
 			mStateTextView.setVisibility(View.VISIBLE);
 			mResultView.setVisibility(View.GONE);
-			mStateTextView.setText(isDetecting() ? R.string.heart_rate_checking : R.string.heart_rate);
+			int hintTextId = R.string.heart_rate;
+			if(isDetecting()){
+				hintTextId = R.string.heart_rate_checking;
+			}else if(mState == STATE_TIMEOUT){
+				hintTextId = R.string.heart_rate_timeout;
+			}
+			mStateTextView.setText(hintTextId);
 		}
 		
 		if(mStyle == STYLE_1){
@@ -201,6 +223,7 @@ public class MainActivity extends Activity {
 		//mHandler.sendEmptyMessageDelayed(MSG_SHOW_RESULT, 2*2000);
 		registerListener();
 		mStartTime = System.currentTimeMillis();
+		mHandler.sendEmptyMessageDelayed(MSG_SHOW_TIMEOUT, 25000);
 	}
 	
 	private void stopDetecting(){

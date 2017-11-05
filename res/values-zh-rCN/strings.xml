@@ -6,4 +6,5 @@
     <string name="heart_rate_checking">正在测量 ...</string>
     <string name="heart_rate_warning">请佩戴Smart Watch，并与手腕良好贴合</string>
     <string name="wear_not_correct_try_again">佩戴姿势不正确，请点击心的位置重新监测。</string>
+    <string name="heart_rate_timeout">测量超时</string>
 </resources>
